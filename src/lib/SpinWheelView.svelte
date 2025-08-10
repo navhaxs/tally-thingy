@@ -13,8 +13,17 @@
 	let currentWinner = '';
 	let showResetModal = false;
 	let loading = true;
+	let winnersText = '';
 
 	$: items = optionsText.split('\n').filter(line => line.trim()).map(label => ({ label: label.trim() }));
+
+	function updateWinnersFromText() {
+		winners = winnersText.split('\n').filter(line => line.trim());
+	}
+
+	function updateWinnersText() {
+		winnersText = winners.join('\n');
+	}
 	$: if (typeof window !== 'undefined' && !loading) {
 		localStorage.setItem('spinwheelOptions', optionsText);
 		localStorage.setItem('spinwheelWinners', JSON.stringify(winners));
@@ -31,6 +40,7 @@
 	function closeWinnerModal() {
 		if (eliminationMode) {
 			winners = [...winners, currentWinner];
+			updateWinnersText();
 			optionsText = optionsText.split('\n').filter(line => line.trim() !== currentWinner).join('\n');
 		}
 		showWinnerModal = false;
@@ -40,6 +50,7 @@
 		if (typeof window !== 'undefined') {
 			optionsText = localStorage.getItem('spinwheelOptions') || 'Option 1\nOption 2\nOption 3\nOption 4\nOption 5\nOption 6';
 			winners = JSON.parse(localStorage.getItem('spinwheelWinners') || '[]');
+			updateWinnersText();
 			eliminationMode = JSON.parse(localStorage.getItem('spinwheelEliminationMode') || 'false');
 		}
 		loading = false;
@@ -63,6 +74,7 @@
 	}
 
 	function spin() {
+		if (items.length === 0) return;
 		const velocity = Math.random() * 1000 + 1000;
 		wheel.spin(velocity);
 	}
@@ -113,9 +125,9 @@
 			{#if eliminationMode}
 	            <h3 class="text-lg font-semibold">Winners:</h3>
 				<textarea 
-					value={winners.join('\n')} 
-					readonly
-					class="flex-1 p-2 border border-gray-300 rounded resize-none bg-gray-50" 
+					bind:value={winnersText}
+			oninput={updateWinnersFromText} 
+					class="flex-1 p-2 border border-gray-300 rounded resize-none" 
 					placeholder="Winners will appear here"
 				></textarea>
 			{/if}

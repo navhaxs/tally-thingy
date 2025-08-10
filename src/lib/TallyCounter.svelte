@@ -20,6 +20,23 @@
         bind:value={label}
     />
     <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-xl font-bold h-full cursor-pointer" on:click={decrement}>-</button>
-    <span class="text-2xl font-mono w-12 text-center">{count}</span>
+    <input 
+        type="number" 
+        class="text-2xl font-mono w-12 text-center border border-gray-300 rounded no-spinner h-full" 
+        bind:value={count}
+        on:input={() => onCountChange(count)}
+    />
     <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-xl font-bold h-full cursor-pointer" on:click={increment}>+</button>
 </div>
+
+<style>
+    .no-spinner::-webkit-outer-spin-button,
+    .no-spinner::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    .no-spinner[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
