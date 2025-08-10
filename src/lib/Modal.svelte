@@ -31,15 +31,13 @@
             }
         }
 
-        // Escape key triggers second button
+        // Escape key triggers last button
         if (e.key === 'Escape') {
             const buttons = Array.from(
                 modalContent.querySelectorAll<HTMLButtonElement>('button')
             ).filter(el => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden'));
-            if (buttons.length > 1) {
-                buttons[1].click();
-            } else if (buttons.length === 1) {
-                buttons[0].click();
+            if (buttons.length > 0) {
+                buttons[buttons.length - 1].click();
             } else {
                 onClose();
             }

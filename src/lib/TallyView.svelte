@@ -143,7 +143,6 @@
     </div>
 {:else}
     <div class="p-8 max-w-3xl mx-auto">
-        <h2>Tally</h2>
 
         <div class="flex items-center gap-2 mb-6">
             <input
@@ -161,6 +160,8 @@
             </button>
         </div>
 
+        <hr class="my-6 border-gray-300" />
+
         <ul
             use:dndzone={{ items: tallies, dragDisabled, flipDurationMs: 200 }}
             on:consider={handleConsider}
@@ -168,9 +169,9 @@
             class="space-y-2"
         >
             {#each tallies as tally, i (tally.id)}
-                <li class="flex items-center gap-2 bg-white rounded shadow px-2 py-1 relative min-h-[56px]" animate:flip={{ duration: 200 }}>
+                <li class="flex items-stretch gap-2 bg-white rounded shadow px-2 py-1 min-h-[56px]" animate:flip={{ duration: 200 }}>
                     <span
-                        class="handle cursor-grab text-2xl select-none pr-2"
+                        class="handle cursor-grab text-2xl select-none pr-2 flex items-center"
                         title="Drag to reorder"
                         on:mousedown={startDrag}
                         on:touchstart={startDrag}
@@ -183,14 +184,12 @@
                         count={tally.count}
                         onCountChange={(c) => updateCount(i, c)}
                     />
-                    <div class="absolute right-0 top-0 h-full flex items-center">
-                        <button
-                            class="px-4 h-full flex items-center bg-red-500 text-white rounded-r hover:bg-red-600 font-bold cursor-pointer"
-                            on:click={() => openRemoveModal(tally)}
-                        >
-                            Remove
-                        </button>
-                    </div>
+                    <button
+                        class="ml-auto px-4 bg-red-500 text-white rounded hover:bg-red-600 font-bold cursor-pointer flex items-center"
+                        on:click={() => openRemoveModal(tally)}
+                    >
+                        Remove
+                    </button>
                 </li>
             {/each}
         </ul>
