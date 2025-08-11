@@ -31,6 +31,7 @@
 	}
 
 	function handleWinner() {
+		if (items.length === 0) return;
 		confetti();
 		const winner = wheel.getCurrentIndex();
 		currentWinner = items[winner].label;
@@ -73,22 +74,30 @@
 		wheel.onRest = handleWinner;
 	}
 
+	function getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min)) + min;
+	}
+
 	function spin() {
 		if (items.length === 0) return;
-		const velocity = Math.random() * 1000 + 1000;
-		wheel.spin(velocity);
+		const velocity = getRandomInt(600, 1000);
+		wheel.spin(-velocity);
 	}
 
 	function resetWinners() {
 		const allOptions = [...optionsText.split('\n').filter(line => line.trim()), ...winners];
 		optionsText = allOptions.join('\n');
 		winners = [];
+		winnersText = '';
 		showResetModal = false;
 	}
 
 	function clearAll() {
 		optionsText = '';
 		winners = [];
+		winnersText = '';
 		showResetModal = false;
 	}
 </script>
@@ -126,7 +135,7 @@
 	            <h3 class="text-lg font-semibold">Winners:</h3>
 				<textarea 
 					bind:value={winnersText}
-			oninput={updateWinnersFromText} 
+					oninput={updateWinnersFromText} 
 					class="flex-1 p-2 border border-gray-300 rounded resize-none" 
 					placeholder="Winners will appear here"
 				></textarea>
@@ -163,7 +172,7 @@
 				class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
 				onclick={clearAll}
 			>
-				Clear All Entries
+				Clear Everything
 			</button>
 			<button 
 				class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"

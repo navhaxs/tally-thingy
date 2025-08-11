@@ -35,6 +35,7 @@
     let showRemoveModal = false;
     let showResetModal = false;
     let modalTally: Tally | null = null;
+    let isLocked = true;
 
     import { onMount } from 'svelte';
     onMount(() => {
@@ -158,6 +159,12 @@
             >
                 Add Team
             </button>
+            <button
+                class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 font-bold cursor-pointer"
+                on:click={() => isLocked = !isLocked}
+            >
+                {isLocked ? '🔒' : '🔓'}
+            </button>
         </div>
 
         <hr class="my-6 border-gray-300" />
@@ -170,38 +177,44 @@
         >
             {#each tallies as tally, i (tally.id)}
                 <li class="flex items-stretch gap-2 bg-white rounded shadow px-2 py-1 min-h-[56px]" animate:flip={{ duration: 200 }}>
-                    <span
-                        class="handle cursor-grab text-2xl select-none pr-2 flex items-center"
-                        title="Drag to reorder"
-                        on:mousedown={startDrag}
-                        on:touchstart={startDrag}
-                        on:mouseup={stopDrag}
-                        on:touchend={stopDrag}
-                        style="user-select: none;"
-                    >☰</span>
+                    {#if !isLocked}
+                        <span
+                            class="handle cursor-grab text-2xl select-none pr-2 flex items-center"
+                            title="Drag to reorder"
+                            on:mousedown={startDrag}
+                            on:touchstart={startDrag}
+                            on:mouseup={stopDrag}
+                            on:touchend={stopDrag}
+                            style="user-select: none;"
+                        >☰</span>
+                    {/if}
                     <TallyCounter
                         label={tally.label}
                         count={tally.count}
                         onCountChange={(c) => updateCount(i, c)}
                     />
-                    <button
-                        class="ml-auto px-4 bg-red-500 text-white rounded hover:bg-red-600 font-bold cursor-pointer flex items-center"
-                        on:click={() => openRemoveModal(tally)}
-                    >
-                        Remove
-                    </button>
+                    {#if !isLocked}
+                        <button
+                            class="ml-auto px-4 bg-red-500 text-white rounded hover:bg-red-600 font-bold cursor-pointer flex items-center"
+                            on:click={() => openRemoveModal(tally)}
+                        >
+                            Remove
+                        </button>
+                    {/if}
                 </li>
             {/each}
         </ul>
 
-        <div class="relative inline-block mt-8">
-            <button
-                class="ml-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-bold cursor-pointer"
-                on:click={openResetModal}
-            >
-                Reset All
-            </button>
-        </div>
+        {#if !isLocked}
+            <div class="relative inline-block mt-8">
+                <button
+                    class="ml-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-bold cursor-pointer"
+                    on:click={openResetModal}
+                >
+                    Reset All
+                </button>
+            </div>
+        {/if}
 
         <Modal open={showRemoveModal && !!modalTally} onClose={closeRemoveModal}>
             <p>Remove <strong>{modalTally?.label}</strong>?</p>

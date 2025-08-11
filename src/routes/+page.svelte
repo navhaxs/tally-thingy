@@ -29,6 +29,7 @@
 	{#if activeTab === 'Timer'}
 		<!-- Timer component will go here -->
 		 <p>coming soon</p>
+		 <br />
 		 <p>game countdown timer, with sfx and vibration at time up</p>
 	{/if}
 	{#if activeTab === 'Soundboard'}
