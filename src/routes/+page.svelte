@@ -3,6 +3,7 @@
 	import Tab from '$lib/Tab.svelte';
 	import TallyView from '$lib/TallyView.svelte';
 	import SpinWheelView from '$lib/SpinWheelView.svelte';
+	import SoundboardView from '$lib/SoundboardView.svelte';
 
 	let activeTab = 'Tally';
 	let tabs = ['Tally', 'Spin the wheel', 'Timer', 'Soundboard', 'Dice roll'];
@@ -33,8 +34,7 @@
 		 <p>game countdown timer, with sfx and vibration at time up</p>
 	{/if}
 	{#if activeTab === 'Soundboard'}
-		<!-- Soundboard component will go here -->
-		 <p>coming soon</p>
+		<SoundboardView />
 	{/if}
 	{#if activeTab === 'Dice roll'}
 		<!-- Dice roll component will go here -->
