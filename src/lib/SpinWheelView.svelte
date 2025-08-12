@@ -61,7 +61,8 @@
 			if (wheelContainer) {
 				wheel = new Wheel(wheelContainer, { 
 					items,
-					pointerAngle: 0
+					rotationSpeedMax: 1000,
+					rotationResistance: -200,
 				});
 				wheel.onRest = handleWinner;
 			}
@@ -70,7 +71,6 @@
 
 	$: if (wheel) {
 		wheel.items = items;
-		wheel.pointerAngle = 0;
 		wheel.onRest = handleWinner;
 	}
 
@@ -110,9 +110,9 @@
 		</div>
 	</div>
 {:else}
-	<div class="flex flex-1">
-		<div class="flex-1 flex flex-col items-center justify-center gap-4">
-			<div class="flex relative flex-1 w-full">
+	<div class="flex flex-1 flex-col md:flex-row">
+		<div class="flex-1 flex flex-col items-center justify-center gap-4 min-h-96">
+			<div class="flex relative flex-1 w-full max-w-96">
 				<div class="tick-mark"></div>
 				<div class="relative flex-1 w-full" bind:this={wheelContainer}></div>
 			</div>
@@ -125,10 +125,10 @@
 				<button onclick={() => showResetModal = true} class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Reset</button>
 			</div>
 		</div>
-		<div class="w-64 p-4 border-l border-gray-300 flex flex-col gap-4">
+		<div class="w-full md:w-64 p-4 border-t md:border-t-0 md:border-l border-gray-300 flex flex-col gap-4">
 			<textarea 
 				bind:value={optionsText} 
-				class="flex-1 p-2 border border-gray-300 rounded resize-none" 
+				class="h-32 md:flex-1 p-2 border border-gray-300 rounded resize-none" 
 				placeholder="Enter options, one per line"
 			></textarea>
 			{#if eliminationMode}
@@ -136,7 +136,7 @@
 				<textarea 
 					bind:value={winnersText}
 					oninput={updateWinnersFromText} 
-					class="flex-1 p-2 border border-gray-300 rounded resize-none" 
+					class="h-32 md:flex-1 p-2 border border-gray-300 rounded resize-none" 
 					placeholder="Winners will appear here"
 				></textarea>
 			{/if}
